@@ -175,7 +175,7 @@ class JoyLLM:
                 # print(f"现在的显存{retries}:{free_vram}")
                 if free_vram > 6400:
                     text_model = AutoModelForCausalLM.from_pretrained(text_model_path,
-                                                              device_map=self.load_device,
+                                                              device="cuda:1",
                                                               local_files_only=True,
                                                               trust_remote_code=True, torch_dtype=self.type)
                     text_model.eval()
@@ -186,7 +186,7 @@ class JoyLLM:
                     retries += 1
                     if retries > max_retries:
                         text_model = AutoModelForCausalLM.from_pretrained(text_model_path,
-                                                                          device_map=self.load_device,
+                                                                          device="cuda:1",
                                                                           local_files_only=True,
                                                                           trust_remote_code=True,
                                                                           torch_dtype=self.type)
