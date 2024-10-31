@@ -244,9 +244,7 @@ class Joy_caption_two_load:
         
         #self.load_device = comfy.model_management.text_encoder_device()
         gpu_id = 1
-        self.load_device = torch.device(f"cuda:{gpu_id}" if torch.cuda.is_available() else "cpu")
-        
-        self.load_device = comfy.model_management.text_encoder_device()
+        self.load_device = torch.device(f"cuda:{gpu_id}" if torch.cuda.is_available() else "cpu") 
         
         self.offload_device = comfy.model_management.text_encoder_offload_device()
         self.pipeline = JoyTwoPipeline(self.load_device, self.offload_device)
