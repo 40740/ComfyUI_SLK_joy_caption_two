@@ -175,7 +175,7 @@ class JoyLLM:
                 # print(f"现在的显存{retries}:{free_vram}")
                 if free_vram > 6400:
                     text_model = AutoModelForCausalLM.from_pretrained(text_model_path,
-                                                              device="cuda:1",
+                                                              device_map=self.load_device,
                                                               local_files_only=True,
                                                               trust_remote_code=True, torch_dtype=self.type)
                     text_model.eval()
@@ -186,7 +186,7 @@ class JoyLLM:
                     retries += 1
                     if retries > max_retries:
                         text_model = AutoModelForCausalLM.from_pretrained(text_model_path,
-                                                                          device="cuda:1",
+                                                                          device_map=self.load_device,
                                                                           local_files_only=True,
                                                                           trust_remote_code=True,
                                                                           torch_dtype=self.type)
@@ -241,7 +241,13 @@ class Joy_caption_two_load:
 
     def __init__(self):
         self.model = None
+        
+        #self.load_device = comfy.model_management.text_encoder_device()
+        gpu_id = 1
+        self.load_device = torch.device(f"cuda:{gpu_id}" if torch.cuda.is_available() else "cpu")
+        
         self.load_device = comfy.model_management.text_encoder_device()
+        
         self.offload_device = comfy.model_management.text_encoder_offload_device()
         self.pipeline = JoyTwoPipeline(self.load_device, self.offload_device)
         self.pipeline.parent = self
